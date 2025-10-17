@@ -2,11 +2,11 @@ const button = document.getElementById('getWeather');
 const input = document.getElementById('locationInput');
 const output = document.getElementById('output');
 
-// WeatherAPI key and base URL
+// WeatherAPI key and HTTPS base URL
 const API_KEY = '48fd506a158b4749881134930251610';
-const BASE_URL = 'http://api.weatherapi.com/v1/current.json';
+const BASE_URL = 'https://api.weatherapi.com/v1/current.json';
 
-// Function to fetch weather by city or coordinates
+// Function to fetch weather by city name or coordinates
 async function fetchWeather(query) {
   try {
     output.innerHTML = '<p>Loading weather data...</p>';
@@ -16,17 +16,14 @@ async function fetchWeather(query) {
 
     if (data.error) throw new Error(data.error.message);
 
-    const temp = data.current.temp_c;
-    const condition = data.current.condition.text;
-    const icon = data.current.condition.icon;
-    const cityName = data.location.name;
-    const country = data.location.country;
+    const { temp_c, condition } = data.current;
+    const { name: cityName, country } = data.location;
 
     output.innerHTML = `
       <h2>${cityName}, ${country}</h2>
-      <p><strong>${temp}°C</strong></p>
-      <p>${condition}</p>
-      <img src="https:${icon}" alt="weather icon" />
+      <p><strong>${temp_c}°C</strong></p>
+      <p>${condition.text}</p>
+      <img src="https:${condition.icon}" alt="Weather Icon" />
     `;
   } catch (error) {
     output.innerHTML = '<p>⚠️ Could not fetch weather. Please try again.</p>';
@@ -34,7 +31,7 @@ async function fetchWeather(query) {
   }
 }
 
-// Button click: fetch weather by city
+// Fetch weather when user clicks the button
 button.addEventListener('click', () => {
   const city = input.value.trim();
   if (!city) {
@@ -44,7 +41,7 @@ button.addEventListener('click', () => {
   fetchWeather(city);
 });
 
-// On page load: auto-detect user location
+// Auto-detect weather based on user's geolocation
 window.addEventListener('load', () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
