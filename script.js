@@ -2,11 +2,11 @@ const button = document.getElementById('getWeather');
 const input = document.getElementById('locationInput');
 const output = document.getElementById('output');
 
-// WeatherAPI key and HTTPS base URL
+// WeatherAPI key and HTTPS URL
 const API_KEY = '48fd506a158b4749881134930251610';
 const BASE_URL = 'https://api.weatherapi.com/v1/current.json';
 
-// Function to fetch weather by city name or coordinates
+// Fetch weather by city or coordinates
 async function fetchWeather(query) {
   try {
     output.innerHTML = '<p>Loading weather data...</p>';
@@ -31,7 +31,7 @@ async function fetchWeather(query) {
   }
 }
 
-// Fetch weather when user clicks the button
+// Button click for manual city input
 button.addEventListener('click', () => {
   const city = input.value.trim();
   if (!city) {
@@ -41,7 +41,7 @@ button.addEventListener('click', () => {
   fetchWeather(city);
 });
 
-// Auto-detect weather based on user's geolocation
+// Auto-detect weather based on geolocation
 window.addEventListener('load', () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
